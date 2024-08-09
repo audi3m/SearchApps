@@ -13,6 +13,7 @@ import RxCocoa
 class SearchViewController: UIViewController {
     
     let searchController = UISearchController(searchResultsController: SearchResultsViewController())
+    let tableView = UITableView()
     
     let disposeBag = DisposeBag()
 
@@ -37,9 +38,35 @@ extension SearchViewController {
         navigationItem.title = "검색"
         navigationItem.searchController = searchController
         
+        view.addSubview(tableView)
+        tableView.register(ResultTableViewCell.self, forCellReuseIdentifier: ResultTableViewCell.id)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.separatorStyle = .none
+        tableView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
     }
     
     
 }
 
-
+// TableView
+extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        20
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ResultTableViewCell.id, for: indexPath) as! ResultTableViewCell
+        
+        return cell
+    }
+     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = DetailViewControllers()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+}
