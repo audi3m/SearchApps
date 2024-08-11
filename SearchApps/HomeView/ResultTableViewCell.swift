@@ -15,12 +15,11 @@ final class ResultTableViewCell: UITableViewCell {
     static let id = "ResultTableViewCell"
     
     var disposeBag = DisposeBag()
-    var app: Appp?
+    var appp: Appp?
     
     private let logoImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
-        view.image = UIImage(named: "kakaoT")
         view.layer.cornerRadius = 10
         view.clipsToBounds = true
         view.backgroundColor = .systemGray5
@@ -28,9 +27,7 @@ final class ResultTableViewCell: UITableViewCell {
     }()
     private let appLabel: UILabel = {
         let view = UILabel()
-        view.backgroundColor = .systemGray5
         view.font = .boldSystemFont(ofSize: 17)
-        view.text = "Dummy Text"
         return view
     }()
     private let downloadButton: UIButton = {
@@ -54,6 +51,8 @@ final class ResultTableViewCell: UITableViewCell {
     private let ratingView: UILabel = {
         let view = UILabel()
         view.text = "asdasd"
+        view.font = .systemFont(ofSize: 14)
+        view.textColor = .secondaryLabel
         return view
     }()
     private let corpLabel: UILabel = {
@@ -146,6 +145,7 @@ final class ResultTableViewCell: UITableViewCell {
             make.leading.equalTo(logoImageView.snp.trailing).offset(8)
             make.trailing.equalTo(downloadButton.snp.leading).offset(-8)
             make.centerY.equalTo(logoImageView)
+            make.height.equalTo(17)
         }
         
         downloadButton.snp.makeConstraints { make in
@@ -161,7 +161,7 @@ final class ResultTableViewCell: UITableViewCell {
         }
         
         imageStackView.snp.makeConstraints { make in
-            make.top.equalTo(stackView.snp.bottom).offset(8)
+            make.top.equalTo(stackView.snp.bottom).offset(10)
             make.horizontalEdges.equalTo(contentView).inset(20)
             make.bottom.equalTo(contentView).offset(-25)
         }
@@ -178,21 +178,29 @@ final class ResultTableViewCell: UITableViewCell {
         imageView3.snp.makeConstraints { make in
             make.width.equalTo(imageView3.snp.height).multipliedBy(aspectRatio)
         }
-        // 392*696
         
+    }
+    
+    func configureData() {
+        guard let appp else { return }
+        
+        let url = URL(string: appp.icon60)
+        logoImageView.kf.setImage(with: url)
+        appLabel.text = appp.appTitle
+        ratingView.text = appp.rating
+        corpLabel.text = appp.corpName
+        categoryLabel.text = appp.genres.first ?? ""
+        
+        setImages(with: appp.threeURLs())
         
         
     }
     
-    private func configureData() {
-        guard let app else { return }
+    private func setImages(with urls: [URL?]) {
+        let imageViews = [imageView1, imageView2, imageView3]
         
-        let url = URL(string: app.artworkUrl60)
-        logoImageView.kf.setImage(with: url)
-        appLabel.text = app.trackName
-        
-        
-        
-        
+        for (index, url) in urls.enumerated() {
+            imageViews[index].kf.setImage(with: url)
+        }
     }
 }

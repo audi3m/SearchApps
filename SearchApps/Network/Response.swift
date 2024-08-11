@@ -13,20 +13,47 @@ struct SearchResponse: Decodable {
 
 struct Appp: Decodable {
     let screenshotUrls: [String]
-    let artworkUrl60: String
-    let artworkUrl100: String
-    let artistName: String
+    let icon60: String
+    let icon100: String
+    let corpName: String
     let description: String
     let genres: [String]
     let price: Double
-    let trackName: String
-    let trackId: Int
+    let appTitle: String
+    let appID: Int
     let version: String
-    
+    let averageUserRatingForCurrentVersion: Double
     let currentVersionReleaseDate: String
-    let releaseNotes: String
+    let releaseNotes: String?
     
+    enum CodingKeys: String, CodingKey {
+        case screenshotUrls
+        case icon60 = "artworkUrl60"
+        case icon100 = "artworkUrl100"
+        case corpName = "artistName"
+        case description
+        case genres
+        case price
+        case appTitle = "trackName"
+        case appID = "trackId"
+        case version
+        case averageUserRatingForCurrentVersion
+        case currentVersionReleaseDate
+        case releaseNotes
+    }
     
+    var rating: String {
+        String(format: "%.1f", averageUserRatingForCurrentVersion)
+    }
+    
+    func threeURLs() -> [URL?] {
+        // 앞 3개의 URL만 변환
+        return screenshotUrls.prefix(3).map { URL(string: $0) }
+    }
+    
+    func allURLs() -> [URL?] {
+        return screenshotUrls.map { URL(string: $0) }
+    }
     
 }
 

@@ -11,6 +11,8 @@ import Kingfisher
 
 final class DetailViewControllers: UIViewController {
     
+    var appp: Appp?
+    
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
@@ -23,7 +25,7 @@ final class DetailViewControllers: UIViewController {
         view.backgroundColor = .systemGray5
         return view
     }()
-    private let appLabel: UILabel = {
+    private let appTitleLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 17)
         label.numberOfLines = 2
@@ -64,10 +66,7 @@ final class DetailViewControllers: UIViewController {
         label.numberOfLines = 0
         return label
     }()
-    private let screenshotsView: UIView = {
-        let view = UIView()
-        return view
-    }()
+    private let screenshotsView = ScreenshotView()
     private let descLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14)
@@ -78,29 +77,34 @@ final class DetailViewControllers: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        configureData(appp: dummyApp)
+        configureData(appp: appp)
     }
 }
 
 // View & Data
 extension DetailViewControllers {
-    func configureData(appp: Appp) {
-        let url = URL(string: appp.artworkUrl100)
+    func configureData(appp: Appp?) {
+        guard let appp else { return }
+        
+        let url = URL(string: appp.icon100)
         logoImageView.kf.setImage(with: url)
-        appLabel.text = appp.trackName
-        corpLabel.text = appp.artistName
-        versionLabel.text = "버전" + appp.version
+        appTitleLabel.text = appp.appTitle
+        corpLabel.text = appp.corpName
+        versionLabel.text = "버전 " + appp.version
         updateDetailLabel.text = appp.releaseNotes
         descLabel.text = appp.description
+        
+        screenshotsView.appp = appp
     }
     
     private func configureView() {
+        navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = .white
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
         contentView.addSubview(logoImageView)
-        contentView.addSubview(appLabel)
+        contentView.addSubview(appTitleLabel)
         contentView.addSubview(corpLabel)
         contentView.addSubview(downloadButton)
         contentView.addSubview(newsLabel)
@@ -124,14 +128,14 @@ extension DetailViewControllers {
             make.size.equalTo(100)
         }
         
-        appLabel.snp.makeConstraints { make in
+        appTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(logoImageView.snp.top)
             make.leading.equalTo(logoImageView.snp.trailing).offset(20)
             make.trailing.equalToSuperview().offset(-20)
         }
         
         corpLabel.snp.makeConstraints { make in
-            make.top.equalTo(appLabel.snp.bottom).offset(4)
+            make.top.equalTo(appTitleLabel.snp.bottom).offset(4)
             make.leading.equalTo(logoImageView.snp.trailing).offset(20)
         }
         
@@ -160,7 +164,6 @@ extension DetailViewControllers {
         screenshotsView.snp.makeConstraints { make in
             make.top.equalTo(updateDetailLabel.snp.bottom).offset(30)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(200)
         }
         
         descLabel.snp.makeConstraints { make in
