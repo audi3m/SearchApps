@@ -71,7 +71,6 @@ final class ResultTableViewCell: UITableViewCell {
         view.textColor = .secondaryLabel
         return view
     }()
-    
     private lazy var imageStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
@@ -83,7 +82,6 @@ final class ResultTableViewCell: UITableViewCell {
         view.addArrangedSubview(imageView3)
         return view
     }()
-    
     private let imageView1: UIImageView = {
         let view = UIImageView()
         view.backgroundColor = .systemGray5
@@ -105,8 +103,6 @@ final class ResultTableViewCell: UITableViewCell {
         view.clipsToBounds = true
         return view
     }()
-    
-    
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -184,16 +180,14 @@ final class ResultTableViewCell: UITableViewCell {
     func configureData() {
         guard let appp else { return }
         
-        let url = URL(string: appp.icon60)
-        logoImageView.kf.setImage(with: url)
+        let logoUrl = URL(string: appp.icon60)
+        logoImageView.kf.setImage(with: logoUrl)
         appLabel.text = appp.appTitle
         ratingView.text = appp.rating
         corpLabel.text = appp.corpName
         categoryLabel.text = appp.genres.first ?? ""
         
         setImages(with: appp.threeURLs())
-        
-        
     }
     
     private func setImages(with urls: [URL?]) {

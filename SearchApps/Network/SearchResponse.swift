@@ -1,5 +1,5 @@
 //
-//  Response.swift
+//  SearchResponse.swift
 //  SearchApps
 //
 //  Created by J Oh on 8/8/24.
@@ -47,7 +47,6 @@ struct Appp: Decodable {
     }
     
     func threeURLs() -> [URL?] {
-        // 앞 3개의 URL만 변환
         return screenshotUrls.prefix(3).map { URL(string: $0) }
     }
     
