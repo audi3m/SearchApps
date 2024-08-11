@@ -93,7 +93,6 @@
 				D48234BE2C678C1D00BD02E4 /* HomeView */,
 				D48234912C648C7300BD02E4 /* ResultView */,
 				D48234BF2C678CD800BD02E4 /* DetailView */,
-				D48234922C648C8100BD02E4 /* Design */,
 				D48234A72C648E4600BD02E4 /* LocalData */,
 				D48234A62C648E4200BD02E4 /* etc */,
 				D48234862C648ADA00BD02E4 /* Assets.xcassets */,
@@ -109,13 +108,6 @@
 				D48234A82C648FFF00BD02E4 /* RecentSearchTermsViewController.swift */,
 			);
 			path = ResultView;
-			sourceTree = "<group>";
-		};
-		D48234922C648C8100BD02E4 /* Design */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Design;
 			sourceTree = "<group>";
 		};
 		D48234932C648C8300BD02E4 /* Network */ = {
