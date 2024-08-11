@@ -42,7 +42,6 @@ final class NetworkManager {
                     print("응답 ok, 디코딩 실패")
                     observer.onError(APIError.decodingError)
                 }
-                
             }.resume()
             
             return Disposables.create()
