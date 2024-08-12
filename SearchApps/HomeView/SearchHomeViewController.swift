@@ -51,7 +51,7 @@ extension SearchHomeViewController: UISearchBarDelegate {
                 owner.navigationController?.pushViewController(vc, animated: true)
             })
             .disposed(by: disposeBag)
-        
+         
     }
 }
 
