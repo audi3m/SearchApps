@@ -9,12 +9,34 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-final class SearchViewModel {
+final class SearchViewModel: BaseViewModel {
     
     let disposeBag = DisposeBag()
     
+    func newTransform(input: Input) -> SingleOutput {
+        
+        let result = input.searchButtonTap
+            .withLatestFrom(input.searchText)
+            .flatMap { term in
+                NetworkManager.shared.requestSingle(term: term)
+                    .catch { error in
+                        return Single<SearchResponse>.never()
+                    }
+            }
+            .asDriver(onErrorJustReturn: SearchResponse(results: []))
+            .debug("Button Tap")
+        
+        return SingleOutput(apppList: result)
+    }
+    
     func transform(input: Input) -> Output {
         let apppList = PublishSubject<[Appp]>()
+        
+        input.searchText
+            .subscribe(with: self) { owner, value in
+                print("Search: \(value)")
+            }
+            .disposed(by: disposeBag)
         
         input.searchButtonTap
             .withLatestFrom(input.searchText)
@@ -33,13 +55,6 @@ final class SearchViewModel {
             })
             .disposed(by: disposeBag)
         
-        input.searchText
-            .subscribe(with: self) { owner, value in
-                print("Search: \(value)")
-            }
-            .disposed(by: disposeBag)
-        
-        
         return Output(apppList: apppList)
     }
     
@@ -54,4 +69,17 @@ extension SearchViewModel {
     struct Output {
         let apppList: Observable<[Appp]>
     }
+    
+    struct SingleOutput {
+        let apppList: Driver<SearchResponse>
+    }
+}
+
+protocol BaseViewModel {
+    
+    associatedtype Input
+    associatedtype Output
+    
+    func transform(input: Input) -> Output
+    
 }

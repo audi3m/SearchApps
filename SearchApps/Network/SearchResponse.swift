@@ -7,8 +7,12 @@
 
 import Foundation
 
-struct SearchResponse: Decodable {
+struct SearchResponse: Decodable, Sequence {
     let results: [Appp]
+    
+    func makeIterator() -> Array<Appp>.Iterator {
+        return results.makeIterator()
+    }
 }
 
 struct Appp: Decodable {
@@ -18,7 +22,7 @@ struct Appp: Decodable {
     let corpName: String
     let description: String
     let genres: [String]
-    let price: Double
+    let price: Double?
     let appTitle: String
     let appID: Int
     let version: String
